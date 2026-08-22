@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  capone-agent:
+    build: .
+    ports:
+      - "7000:7000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - MCP_WEBSOCKET_URL=${MCP_WEBSOCKET_URL:-wss://caponemcp-production.up.railway.app/mcp}
+      - MODEL_NAME=${MODEL_NAME:-gemini-2.5-flash}
+      - MAX_OUTPUT_TOKENS=${MAX_OUTPUT_TOKENS:-1024}
+      - DEBUG=${DEBUG:-false}
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:7000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
