@@ -1,6 +1,7 @@
 .env
 test.py
 .venv
+venv/
 __pycache__
 run_tests.py
 test_api.py

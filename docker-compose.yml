@@ -7,8 +7,9 @@ services:
       - "7000:7000"
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - REDIS_URL=${REDIS_URL}
       - MCP_WEBSOCKET_URL=${MCP_WEBSOCKET_URL:-wss://caponemcp-production.up.railway.app/mcp}
-      - MODEL_NAME=${MODEL_NAME:-gemini-2.5-flash}
+      - MODEL_NAME=${MODEL_NAME:-gemini-3.6-flash}
       - MAX_OUTPUT_TOKENS=${MAX_OUTPUT_TOKENS:-1024}
       - DEBUG=${DEBUG:-false}
     env_file:

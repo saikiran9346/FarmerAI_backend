@@ -1,5 +1,16 @@
 """FastAPI service for CapOne Agents."""
 
+import sys
+import io
+
+# Ensure UTF-8 output encoding on Windows for currency symbols (like ₹) and emojis
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 import json
 import logging
 import asyncio

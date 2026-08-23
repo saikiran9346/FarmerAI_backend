@@ -8,6 +8,15 @@ import json
 import os
 import asyncio
 import sys
+import io
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 from dotenv import load_dotenv
 
 load_dotenv()
