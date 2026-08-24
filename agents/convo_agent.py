@@ -93,7 +93,15 @@ EXAMPLES:
 - "Calculate EMI for 5 lakh loan" → {"type": "agent_call", "agent": "financial_agent", "query": "Calculate EMI for 5 lakh loan"}
 - "What's the weather forecast?" → {"type": "agent_call", "agent": "agrifact_agent", "query": "What's the weather forecast?"}
 
-Remember: Return ONLY the JSON object, nothing else."""
+Remember: Return ONLY the JSON object, nothing else.
+
+LANGUAGE RULE (CRITICAL):
+- Always detect the language of the user's message.
+- Always respond in the SAME language the user used.
+- If user writes in Telugu → respond in Telugu.
+- If user writes in Hindi → respond in Hindi.
+- If user writes in English → respond in English.
+- Never mix languages unless the user does so first."""
 
     def build_workflow(self):
         def debug_node(node_name):
