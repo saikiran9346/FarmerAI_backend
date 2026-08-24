@@ -14,7 +14,7 @@ class AgentConfig(BaseModel):
     """Configuration for CapOne Agents."""
     
     # LLM Configuration
-    model_name: str = "gemini-3.6-flash"
+    model_name: str = "gemini-1.5-flash"
     max_output_tokens: int = 1024
     
     # API Configuration
@@ -32,7 +32,7 @@ class AgentConfig(BaseModel):
         """Create config from environment variables."""
         return cls(
             google_api_key=os.getenv("GOOGLE_API_KEY", ""),
-            model_name=os.getenv("MODEL_NAME", "gemini-3.6-flash"),
+            model_name=os.getenv("MODEL_NAME", "gemini-1.5-flash"),
             max_output_tokens=int(os.getenv("MAX_OUTPUT_TOKENS", "1024")),
             debug_mode=os.getenv("DEBUG", "false").lower() == "true",
             mcp_websocket_url=os.getenv("MCP_WEBSOCKET_URL", "wss://caponemcp-production.up.railway.app/mcp")
