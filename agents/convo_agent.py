@@ -214,7 +214,12 @@ LANGUAGE RULE (CRITICAL):
                     pass
             
             # Add agent result as a user message to prompt orchestrator to respond
-            user_prompt = f"The {agent_name} provided this information: {agent_result}. Please provide a comprehensive response to the user based on this information. Respond with a final_response JSON only."
+            user_prompt = (
+                f"The {agent_name} provided this information: {agent_result}. "
+                f"CRITICAL LANGUAGE RULE: Formulate a comprehensive, helpful final response to the user based on this information. "
+                f"You MUST respond in the EXACT SAME LANGUAGE that the user originally asked in (e.g., if the user asked in Telugu, answer entirely in Telugu; if in Hindi, answer in Hindi; if in English, answer in English). "
+                f"Respond with a final_response JSON only: {{\"type\": \"final_response\", \"response\": \"your response in user's language\"}}"
+            )
             
             return {
                 "messages": state.messages + [
