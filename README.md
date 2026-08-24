@@ -1,74 +1,82 @@
-# CapOne Agents - AI-Powered Agricultural and Financial Assistant
+# FarmerAI Backend - Agentic AI Agricultural & Financial Assistant
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.116.1-green)
-![Redis](https://img.shields.io/badge/Redis-6.4.0-red)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-orange)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-Flash%20LLM-purple)
+![Redis](https://img.shields.io/badge/Redis-Upstash%20%2F%20Local-red)
 
-A sophisticated AI agent system designed to provide comprehensive agricultural and financial assistance to farmers. The system features specialized agents for different domains, Redis-powered conversation management, and a robust REST API.
+A scalable, state-of-the-art **Multi-Agent Agricultural and Financial AI Platform** built with **LangGraph, FastAPI, Google Gemini, and Redis**. The platform dynamically routes farmer inquiries across specialized domain agents, persists cross-session contextual memory, extracts structured farm profiles (crops, acreage, district, financial loans), and generates real-time personalized agronomic advisories.
 
-## 🚀 Features
+---
 
-- **🤖 Multi-Agent Architecture**: Specialized agents for different domains
-  - **Conversational Agent**: Main orchestrator for user interactions
-  - **Agricultural Agent (AgrifactAgent)**: Weather, soil analysis, crop diseases, policies
-  - **Financial Agent**: Loan calculations, EMI, insurance, market analysis
-- **💬 Stateless Conversation Management**: Redis-powered multi-user support
-- **🛠️ External Tool Integration**: Weather, market data, soil analysis, disease detection
-- **📊 Background Processing**: Automatic conversation summarization
-- **🔄 Real-time Data**: Live market prices, weather forecasts, disaster alerts
-- **🏥 Health Monitoring**: Comprehensive health checks and monitoring
-- **🐳 Containerized Deployment**: Docker and Docker Compose support
+## 🚀 Key Features
+
+- **🤖 Multi-Agent Orchestration (LangGraph)**:
+  - **Conversational Agent**: Core orchestrator routing queries based on dynamic intent classification.
+  - **Agricultural Expert Agent (`AgrifactAgent`)**: Weather forecasts, soil analysis, crop pest/disease diagnosis, and government schemes.
+  - **Financial Agent (`FinancialAgent`)**: KCC loan calculations, monthly EMI analysis, insurance evaluation, and budgeting via Python Code Interpreter.
+- **🌐 Multilingual Support**: Automatic detection and native responses in **Telugu, Hindi, and English**.
+- **💬 Stateful & Scalable Memory**: Redis-backed session management maintaining conversation history and auto-extracting user artefacts.
+- **🏷️ Structured Artefact Extraction**: Dedicated `SummaryService` & `ArtefactSummaryAgent` that parse unstructured conversations into structured farm profiles.
+- **⚡ Event-Driven Notification Agent**: Generates real-time, proactive advisories by correlating farmer artefacts with live weather and market data.
+- **🛠️ MCP External Tool Integration**: Real-time tools for weather, soil grids, commodity prices, disease detection, and code execution.
+- **🏥 Production-Grade Monitoring**: Comprehensive health checks, structured logging, and automated test suites.
+- **🐳 Containerized Deployment**: Ready for Docker, Render, Railway, and cloud setups.
+
+---
 
 ## 📁 Project Structure
 
 ```
-CapOneAgent/
-├── agents/                     # AI Agent implementations
-│   ├── convo_agent.py         # Main conversational orchestrator
-│   ├── financial_agent.py     # Financial calculations and advice
-│   ├── agrifact_agent.py      # Agricultural information and analysis
-│   ├── summary_service.py     # Conversation summarization
-│   └── notification_service.py # Notification generation
-├── services/                   # Core services
-│   ├── redis_conversation_manager.py  # Redis conversation storage
-│   └── background_tasks.py    # Background processing tasks
-├── utils/                      # Utility functions
-│   ├── tool_utils.py          # External tool execution
-│   └── base.py                # Base classes and utilities
+FarmerAI/
+├── agents/                     # Specialized Agent implementations
+│   ├── convo_agent.py          # LangGraph conversational orchestrator
+│   ├── financial_agent.py      # Financial calculations & code interpreter
+│   ├── agrifact_agent.py       # Agricultural analysis, weather & soil
+│   ├── summary_service.py      # Conversation summarization & artefact extractor
+│   └── notification_service.py # Event-driven personalized alerts
+├── services/                   # Core business services
+│   ├── redis_conversation_manager.py  # Redis session storage & retrieval
+│   └── background_tasks.py     # Asynchronous background workers
+├── utils/                      # Utilities and tool execution
+│   ├── tool_utils.py           # External tool & MCP client integration
+│   └── base.py                 # Base agent abstractions
 ├── main.py                     # FastAPI application entry point
-├── config.py                   # Configuration management
-├── pyproject.toml             # Poetry dependencies
-├── docker-compose.yml         # Docker Compose configuration
-├── dockerfile                 # Docker container definition
-└── README.md                  # This file
+├── config.py                   # Pydantic configuration & settings
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # Container definition
+├── docker-compose.yml          # Docker orchestration
+└── README.md                   # Backend documentation
 ```
 
-## 🛠️ Installation & Setup
+---
+
+## 🛠️ Installation & Local Setup
 
 ### Prerequisites
 
 - **Python 3.10+**
-- **Redis Server** (local or cloud)
-- **Poetry** (for dependency management)
-- **Google API Key** (for Gemini LLM)
+- **Redis Server** (Local instance or Upstash cloud Redis)
+- **Google Gemini API Key**
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd CapOneAgent
+git clone https://github.com/saikiran9346/FarmerAI_backend.git
+cd FarmerAI_backend
 ```
 
-### 2. Install Dependencies
+### 2. Set Up Virtual Environment & Dependencies
 
-Using Poetry (recommended):
 ```bash
-poetry install
-```
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux/macOS:
+source venv/bin/activate
 
-Using pip:
-```bash
 pip install -r requirements.txt
 ```
 
@@ -76,374 +84,140 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project root:
 
-```bash
-# LLM Configuration
+```env
+# Gemini LLM Configuration
 GOOGLE_API_KEY=your_google_api_key_here
 MODEL_NAME=gemini-2.5-flash
 MAX_OUTPUT_TOKENS=1024
 
+# Redis Configuration (Local or Upstash Cloud)
+REDIS_URL=rediss://default:your_password@your-endpoint.upstash.io:6379
+
 # MCP Tool Server
 MCP_WEBSOCKET_URL=wss://caponemcp-production.up.railway.app/mcp
 
-# Redis Configuration
-REDIS_URL=redis://localhost:6379
-# For Railway: REDIS_URL=redis://default:password@host.railway.app:port
-
-# Optional
+# Server Configuration
 DEBUG=false
 PORT=7000
 ```
 
-### 4. Redis Setup
+### 4. Running the Backend
 
-#### Option A: Local Redis
+#### Development Mode:
 ```bash
-# macOS
-brew install redis
-brew services start redis
-
-# Ubuntu/Debian
-sudo apt install redis-server
-sudo systemctl start redis
-
-# Windows (using Docker)
-docker run -d --name redis -p 6379:6379 redis:latest
-```
-
-#### Option B: Railway Cloud Redis (Recommended)
-1. Add Redis service to your Railway project
-2. Copy the `REDIS_URL` from Railway dashboard
-3. Update your `.env` file with the Railway Redis URL
-
-## 🚀 Running the Application
-
-### Development Mode
-
-```bash
-# Using Poetry
-poetry run python main.py
-
-# Using Python directly
 python main.py
-
-# The server will start on http://localhost:7000
+# Server runs at http://localhost:7000
 ```
 
-### Production Mode
-
+#### Production Mode with Uvicorn:
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 7000 --workers 4
 ```
 
-### Using Docker
-
+#### Docker:
 ```bash
-# Build and run with Docker Compose
-docker-compose up --build
-
-# Or build and run manually
-docker build -t capone-agent .
-docker run -p 7000:7000 --env-file .env capone-agent
+docker build -t farmerai-backend .
+docker run -p 7000:7000 --env-file .env farmerai-backend
 ```
+
+---
 
 ## 📡 API Endpoints
 
-### Health Check
-```bash
+### 1. Health Check
+```http
 GET /health
 ```
 
-### Chat Interface
-```bash
+### 2. Multi-Agent Chat
+```http
 POST /chat
 Content-Type: application/json
 
 {
-  "query": "What's the weather forecast for my crops?",
-  "user_id": "farmer123",
-  "conversation_id": "session_001",
-  "user_location": "Punjab, India"
+  "query": "I have 5 acres of cotton in Warangal. What fertilizer should I use and what is the EMI for 2 lakh loan?",
+  "user_id": "farmer_101",
+  "conversation_id": "conv_1740000000"
 }
 ```
 
-### Conversation Management
-```bash
-# Get user conversations
+### 3. Conversation & Session Management
+```http
+# Fetch list of conversations for a user
 GET /conversations/{user_id}
 
-# Delete conversation
+# Fetch complete message history for a conversation
+GET /conversations/{user_id}/{conversation_id}
+
+# Delete a specific conversation session
 DELETE /conversations/{user_id}/{conversation_id}
 ```
 
-### Summary & Artifacts
-```bash
-# Generate conversation summary
+### 4. Artefact Extraction & Summarization
+```http
+# Generate session summary
 POST /conversation/summary
-{
-  "messages": [...],
-  "previous_summary": "...",
-  "session_id": "session_001"
-}
 
-# Extract conversation artifacts
+# Extract structured farm profile entities (crops, land, district, loans)
 POST /conversation/artefacts
-{
-  "messages": [...],
-  "session_id": "session_001"
-}
 ```
 
-### Notifications
-```bash
+### 5. Personalized Smart Advisories
+```http
 POST /notification
+Content-Type: application/json
+
 {
-  "user_id": "farmer123",
-  "conversation_id": "session_001",
+  "user_id": "farmer_101",
+  "conversation_id": "conv_1740000000",
   "artefacts": [...],
-  "event_article": "Weather alert text..."
+  "event_article": "Weather alert: heavy unseasonal rainfall expected in Telangana"
 }
 ```
-
-### Tools
-```bash
-# List available tools
-GET /tools
-
-# Test a specific tool
-POST /tools/test
-{
-  "tool_name": "weather",
-  "arguments": {"lat": 28.7041, "lon": 77.1025}
-}
-```
-
-## 🧪 Testing
-
-### Quick Test (Railway Redis)
-```bash
-python test_railway_redis.py
-```
-
-### Run All Tests
-```bash
-python run_tests.py
-```
-
-### Individual Test Suites
-```bash
-# Redis unit tests (fast)
-python test_redis_unit.py
-
-# Integration tests (requires GOOGLE_API_KEY)
-python test_integration.py
-
-# API tests (requires running server)
-python main.py  # In one terminal
-python test_api.py  # In another terminal
-
-# Comprehensive Redis tests
-python test_redis_functionality.py
-```
-
-### Selective Testing
-```bash
-python run_tests.py --unit          # Only unit tests
-python run_tests.py --integration   # Only integration tests
-python run_tests.py --api          # Only API tests
-```
-
-## 🔧 Architecture
-
-### Agent System
-
-The system uses a **multi-agent architecture** with specialized agents:
-
-1. **ConversationalAgent**: Main orchestrator that routes queries to specialized agents
-2. **FinancialAgent**: Handles loan calculations, EMI, insurance, market analysis
-3. **AgrifactAgent**: Manages weather, soil analysis, crop diseases, policies
-
-### Conversation Management
-
-- **Stateless Design**: Each request is independent
-- **Redis Storage**: Last 10 messages + summary per conversation
-- **Multi-user Support**: Isolated conversations per user
-- **Auto-cleanup**: 24-hour TTL for conversations
-- **Background Summarization**: Automatic summary updates
-
-### Tool Integration
-
-The system integrates with external tools via websocket connections:
-
-- **Weather**: Forecasts and disaster alerts
-- **Market**: Real-time commodity prices
-- **Soil**: Composition analysis using ISRIC SoilGrids
-- **Disease**: Plant disease identification
-- **Policy**: Government schemes and policies
-- **Insurance**: Agricultural insurance information
-- **Climate**: Climate data analysis
-- **Code Interpreter**: Python code execution
-- **Disaster**: Real-time disaster alerts
-
-## 🔄 Deployment
-
-### Railway Deployment
-
-1. **Connect Repository**: Link your GitHub repository to Railway
-2. **Add Redis Service**: Add Redis addon to your Railway project
-3. **Environment Variables**: Set environment variables in Railway dashboard
-4. **Deploy**: Railway will automatically build and deploy
-
-### Docker Deployment
-
-```bash
-# Build the image
-docker build -t capone-agent .
-
-# Run with environment file
-docker run -p 7000:7000 --env-file .env capone-agent
-
-# Or use Docker Compose
-docker-compose up --build
-```
-
-### Environment Variables for Production
-
-```bash
-# Required
-GOOGLE_API_KEY=your_api_key
-REDIS_URL=your_redis_url
-
-# Optional
-MODEL_NAME=gemini-2.5-flash
-MAX_OUTPUT_TOKENS=1024
-DEBUG=false
-PORT=7000
-MCP_WEBSOCKET_URL=wss://caponemcp-production.up.railway.app/mcp
-```
-
-## 📊 Performance & Monitoring
-
-### Performance Benchmarks
-
-- **Redis Operations**: <5ms average
-- **API Response Time**: <500ms for simple queries
-- **Memory Usage**: <10MB for 100 conversations
-- **Concurrent Users**: 50+ simultaneous conversations
-
-### Monitoring
-
-The system includes comprehensive health checks:
-
-```bash
-# Health endpoint provides:
-GET /health
-{
-  "status": "healthy",
-  "message": "CapOne Agents service is running",
-  "tools_available": 10,
-  "version": "1.0.0"
-}
-```
-
-### Logging
-
-Logs are structured and include:
-- Request/response tracking
-- Agent execution flow
-- Redis operations
-- Tool calls and results
-- Error handling
-
-## 🛡️ Security
-
-- **User Isolation**: Each user's conversations are completely isolated
-- **Data TTL**: Automatic cleanup of conversation data after 24 hours
-- **Input Validation**: Comprehensive input validation using Pydantic models
-- **Error Handling**: Graceful error handling without exposing sensitive data
-- **Non-root Docker**: Docker container runs as non-root user
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Redis Connection Failed
-```
-❌ Redis connection failed: [Errno 111] Connection refused
-```
-**Solution**: Start Redis server or check Redis URL
-
-#### Missing API Key
-```
-⚠️ GOOGLE_API_KEY not set
-```
-**Solution**: Add `GOOGLE_API_KEY` to `.env` file
-
-#### Tool Execution Errors
-```
-❌ Error executing tool: Connection timeout
-```
-**Solution**: Check MCP server status and network connectivity
-
-### Debug Mode
-
-Enable debug mode for verbose logging:
-```bash
-DEBUG=true python main.py
-```
-
-### Manual Testing
-
-Test Redis directly:
-```bash
-redis-cli
-> ping
-PONG
-```
-
-Test API endpoints:
-```bash
-curl -X POST "http://localhost:7000/chat" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "Hello", "user_id": "test"}'
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Make your changes and add tests
-4. Run the test suite: `python run_tests.py`
-5. Commit your changes: `git commit -am 'Add new feature'`
-6. Push to the branch: `git push origin feature/new-feature`
-7. Submit a pull request
-
-### Development Guidelines
-
-- Follow PEP 8 style guidelines
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting PR
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📞 Support
-
-For issues and questions:
-1. Check the troubleshooting section
-2. Review existing issues in the repository
-3. Create a new issue with detailed information
-4. Include logs and error messages
-
-## 🙏 Acknowledgments
-
-- **LangChain & LangGraph**: For the agent framework
-- **FastAPI**: For the high-performance web framework
-- **Redis**: For the fast, reliable data storage
-- **Google Gemini**: For the powerful language model
-- **Railway**: For the deployment platform
 
 ---
 
-Made with ❤️ for farmers and agricultural communities
+## 🧪 Testing Suite
+
+Run the built-in test scripts:
+
+```bash
+# Test Redis connection
+python test_redis_unit.py
+
+# Test Multi-Agent API integration
+python test_api.py
+
+# Run all test suites
+python run_tests.py
+```
+
+---
+
+## 🏗️ Architecture Flow
+
+```mermaid
+flowchart TD
+    User([Farmer / Client]) -->|Query + Multilingual Audio/Text| API[FastAPI /chat]
+    API --> Memory[Redis Session Manager]
+    API --> Orchestrator[ConvoAgent - LangGraph]
+    
+    Orchestrator -->|Intent: Financial / Loan| FinAgent[Financial Agent + Python Code Interpreter]
+    Orchestrator -->|Intent: Farming / Pest / Disease| AgriAgent[Agrifact Agent + MCP Tools]
+    Orchestrator -->|Intent: Direct / Greeting| DirectResp[Direct Multi-lingual LLM Response]
+    
+    FinAgent --> Synthesis[Response Synthesizer]
+    AgriAgent --> Synthesis
+    DirectResp --> Synthesis
+    
+    Synthesis --> Memory
+    Synthesis --> ArtefactAgent[Artefact & Summary Agent]
+    ArtefactAgent -->|Extracted Farm Profile| Upstash[(Upstash Redis DB)]
+    Synthesis --> User
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
