@@ -96,11 +96,19 @@ EXAMPLES:
 Remember: Return ONLY the JSON object, nothing else.
 
 LANGUAGE RULE (CRITICAL):
-- Always detect the language of the user's message.
-- Always respond in the SAME language the user used.
+- Always detect the language of the user's message (Telugu, Hindi, Tamil, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi, English, etc.).
+- Always respond in the EXACT SAME language the user used.
 - If user writes in Telugu → respond in Telugu.
 - If user writes in Hindi → respond in Hindi.
+- If user writes in Tamil → respond in Tamil.
+- If user writes in Kannada → respond in Kannada.
+- If user writes in Malayalam → respond in Malayalam.
+- If user writes in Marathi → respond in Marathi.
+- If user writes in Bengali → respond in Bengali.
+- If user writes in Gujarati → respond in Gujarati.
+- If user writes in Punjabi → respond in Punjabi.
 - If user writes in English → respond in English.
+- If user asks in any other regional/global language, respond in that exact language.
 - Never mix languages unless the user does so first."""
 
     def build_workflow(self):
