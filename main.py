@@ -454,6 +454,20 @@ async def get_user_conversations(user_id: str):
     conversations = redis_manager.get_user_conversations(user_id)
     return {"user_id": user_id, "conversations": conversations}
 
+@app.get("/conversations/{user_id}/{conversation_id}")
+async def get_conversation_history(user_id: str, conversation_id: str):
+    """Get messages and summary of a conversation from Redis."""
+    global redis_manager
+    if not redis_manager:
+        raise HTTPException(status_code=503, detail="Redis manager not initialized")
+    messages, summary = redis_manager.get_conversation_context(user_id, conversation_id)
+    return {
+        "user_id": user_id,
+        "conversation_id": conversation_id,
+        "messages": messages,
+        "summary": summary
+    }
+
 @app.get("/")
 async def root():
     """Root endpoint with service information."""
